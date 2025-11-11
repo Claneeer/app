@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Menu, X, Home, ShoppingCart, TrendingUp, History, User, LogOut } from 'lucide-react';
+import { Menu, X, Home, ShoppingCart, TrendingUp, History, User, LogOut, Building2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 const Navbar = ({ user, setUser }) => {
@@ -32,8 +32,9 @@ const Navbar = ({ user, setUser }) => {
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link to="/dashboard" className="text-2xl font-bold text-white" data-testid="navbar-logo">
-            CryptoWallet
+          <Link to="/dashboard" className="text-2xl font-bold text-white flex items-center gap-2" data-testid="navbar-logo">
+            <Building2 className="w-7 h-7" />
+            BankSys
           </Link>
 
           {/* Desktop Menu */}

@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
+import { Building2 } from 'lucide-react';
 
 const Register = ({ setUser }) => {
   const [name, setName] = useState('');
@@ -37,9 +38,12 @@ const Register = ({ setUser }) => {
     <div className="min-h-screen flex items-center justify-center px-4 py-8" style={{ backgroundColor: '#F5F5F5' }}>
       <div className="w-full max-w-md animate-fade-in">
         <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold mb-3" style={{ color: '#1E3A8A' }}>
-            CryptoWallet
-          </h1>
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <Building2 className="w-12 h-12" style={{ color: '#1E3A8A' }} />
+            <h1 className="text-4xl md:text-5xl font-bold" style={{ color: '#1E3A8A' }}>
+              BankSys
+            </h1>
+          </div>
           <p className="text-gray-600">Crie sua conta</p>
         </div>
 
