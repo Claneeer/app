@@ -1,11 +1,12 @@
 import pytest
-from httpx import AsyncClient
+from httpx import AsyncClient, ASGITransport
 from server import app
 
 @pytest.fixture
 async def authenticated_client():
     """Fixture para cliente autenticado"""
-    async with AsyncClient(app=app, base_url="http://test") as ac:
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as ac:
         response = await ac.post("/api/auth/register", json={
             "name": "CRUD Test User",
             "email": "crud@example.com",
@@ -34,7 +35,8 @@ async def test_update_user_password(authenticated_client):
     assert response.status_code == 200
     
     # Tentar fazer login com nova senha
-    async with AsyncClient(app=app, base_url="http://test") as new_client:
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as new_client:
         login_response = await new_client.post("/api/auth/login", json={
             "email": "crud@example.com",
             "password": "newpassword123"

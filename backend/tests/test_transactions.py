@@ -1,11 +1,12 @@
 import pytest
-from httpx import AsyncClient
+from httpx import AsyncClient, ASGITransport
 from server import app
 
 @pytest.fixture
 async def authenticated_client():
     """Fixture para cliente autenticado"""
-    async with AsyncClient(app=app, base_url="http://test") as ac:
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as ac:
         # Registrar usuário
         response = await ac.post("/api/auth/register", json={
             "name": "Transaction Test User",
@@ -74,7 +75,7 @@ async def test_sell_insufficient_balance(authenticated_client):
 
 @pytest.mark.asyncio
 async def test_buy_and_sell_flow(authenticated_client):
-    """Teste de fluxo completo: compra e venda"""
+    """Teste de fluxo completo: compra → verificar carteira → venda"""
     # Comprar
     buy_response = await authenticated_client.post("/api/transactions/buy", json={
         "crypto_id": "eth",
