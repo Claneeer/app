@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: banksys-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      - MONGO_INITDB_DATABASE=banksys_db
+    networks:
+      - banksys-network
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: banksys-backend
+    ports:
+      - "8001:8001"
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017
+      - DB_NAME=banksys_db
+      - JWT_SECRET_KEY=banksys-secret-key-production-2025-secure-random-string
+      - CORS_ORIGINS=http://localhost:3000,http://localhost:3001
+    depends_on:
+      - mongodb
+    networks:
+      - banksys-network
+    volumes:
+      - ./backend:/app/backend
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: banksys-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_BACKEND_URL=http://localhost:8001
+      - WDS_SOCKET_PORT=443
+    depends_on:
+      - backend
+    networks:
+      - banksys-network
+    volumes:
+      - ./frontend:/app/frontend
+      - /app/frontend/node_modules
+    restart: unless-stopped
+
+volumes:
+  mongo_data:
+    driver: local
+
+networks:
+  banksys-network:
+    driver: bridge
